@@ -25,7 +25,7 @@ export const getMany = (model) => async (req, res) => {
 
 export const createOne = (model) => async (req, res) => {
   const { _id: userId } = req.user;
-  const doc = model.create({
+  const doc = await model.create({
     ...req.body,
     createdBy: userId,
   });
@@ -44,7 +44,7 @@ export const updateOne = (model) => async (req, res) => {
     { new: true }
   );
   if (!doc) {
-    return res.status(404).end();
+    return res.status(400).end();
   }
   res.status(200).json({ data: doc });
 };
