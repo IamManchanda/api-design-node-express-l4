@@ -16,7 +16,11 @@ export const getOne = (model) => async (req, res) => {
   res.status(200).json({ data: doc });
 };
 
-export const getMany = (model) => async (req, res) => {};
+export const getMany = (model) => async (req, res) => {
+  const { _id: userId } = req.user;
+  const docs = await model.find({ createdBy: userId }).exec();
+  res.status(200).json({ data: docs });
+};
 
 export const createOne = (model) => async (req, res) => {};
 
