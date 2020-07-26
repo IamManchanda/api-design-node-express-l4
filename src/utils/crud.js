@@ -1,18 +1,15 @@
 export const getOne = (model) => async (req, res) => {
   const { id } = req.params;
   const { _id: userId } = req.user;
-
   const doc = await model
     .findOne({
       _id: id,
       createdBy: userId,
     })
     .exec();
-
   if (!doc) {
     return res.status(404).end();
   }
-
   res.status(200).json({ data: doc });
 };
 
@@ -35,7 +32,22 @@ export const createOne = (model) => async (req, res) => {
   res.status(201).json({ data: doc });
 };
 
-export const updateOne = (model) => async (req, res) => {};
+export const updateOne = (model) => async (req, res) => {
+  const { id } = req.params;
+  const { _id: userId } = req.user;
+  const doc = await model.findOneAndUpdate(
+    {
+      _id: id,
+      createdBy: userId,
+    },
+    req.body,
+    { new: true }
+  );
+  if (!doc) {
+    return res.status(404).end();
+  }
+  res.status(200).json({ data: doc });
+};
 
 export const removeOne = (model) => async (req, res) => {};
 
