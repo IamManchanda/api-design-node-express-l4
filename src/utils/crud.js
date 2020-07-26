@@ -18,11 +18,22 @@ export const getOne = (model) => async (req, res) => {
 
 export const getMany = (model) => async (req, res) => {
   const { _id: userId } = req.user;
-  const docs = await model.find({ createdBy: userId }).exec();
+  const docs = await model
+    .find({
+      createdBy: userId,
+    })
+    .exec();
   res.status(200).json({ data: docs });
 };
 
-export const createOne = (model) => async (req, res) => {};
+export const createOne = (model) => async (req, res) => {
+  const { _id: userId } = req.user;
+  const doc = model.create({
+    ...req.body,
+    createdBy: userId,
+  });
+  res.status(201).json({ data: doc });
+};
 
 export const updateOne = (model) => async (req, res) => {};
 
